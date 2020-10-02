@@ -1,0 +1,22 @@
+buildscript {
+    repositories {
+        maven { url  "https://maven.sumsub.com/repository/maven-public/" }
+        google()
+        jcenter()
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url  "https://maven.sumsub.com/repository/maven-public/" }
+        google()
+        jcenter()
+    }
+}
+
+dependencies {
+    implementation "com.sumsub.sns:idensic-mobile-sdk:1.12.2"
+    implementation "com.sumsub.sns:idensic-mobile-sdk-liveness3d:1.12.2"
+    implementation 'com.google.android.material:material:1.2.0'
+
+}
