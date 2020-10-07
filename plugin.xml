@@ -64,7 +64,7 @@
             </feature>
         </config-file>
 
-        <pods-config ios-min-version="11.0" use-frameworks="true" strip-debug="true">
+        <pods-config ios-min-version="11.0">
             <source url="https://github.com/SumSubstance/Specs.git" />
             <source url="https://cdn.cocoapods.org/" />
         </pods-config>
