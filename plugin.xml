@@ -38,9 +38,7 @@
 
         <!-- framework h -->
         <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
-     </platform>
-
-    <dependency id="cordova-plugin-cocoapod-supportx"/>
+    </platform>
 
     <platform name="ios">
 
@@ -64,11 +62,7 @@
             </feature>
         </config-file>
 
-        <pods-config ios-min-version="11.0">
-            <source url="https://github.com/SumSubstance/Specs.git" />
-            <source url="https://cdn.cocoapods.org/" />
-        </pods-config>
-        <pod name="IdensicMobileSDK" spec="~> 1.12.2" />
+        <framework src="IdensicMobileSDK" type="podspec" spec="~> 1.12.2"/>
 
         <header-file src="src/ios/SNSMobileSdkCordovaPlugin.h" />
         <source-file src="src/ios/SNSMobileSdkCordovaPlugin.m" />
