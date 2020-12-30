@@ -40,6 +40,8 @@
         <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
     </platform>
 
+    <dependency id="cordova-plugin-cocoapod-supportx"/>
+
     <platform name="ios">
 
         <preference name="CAMERA_USAGE" default="Let us take a photo" />
@@ -62,7 +64,15 @@
             </feature>
         </config-file>
 
-        <framework src="IdensicMobileSDK" type="podspec" spec="~> 1.12.2"/>
+        <podspec>
+            <config>
+                <source url="https://github.com/SumSubstance/Specs.git" />
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="IdensicMobileSDK" spec="~> 1.12.2" />
+            </pods>
+        </podspec>
 
         <header-file src="src/ios/SNSMobileSdkCordovaPlugin.h" />
         <source-file src="src/ios/SNSMobileSdkCordovaPlugin.m" />
