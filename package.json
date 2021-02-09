@@ -1,15 +1,43 @@
 {
-  "version": "1.12.2",
-  "name": "cordova-idensic-mobile-sdk-plugin",
-  "cordova_name": "Cordova plugin exposing SumSub SDK",
-  "description": "Cordova plugin exposing SumSub SDK",
-  "license": "Apache-2.0",
-  "main": "webpack.config.js",
-  "repo": "",
-  "issue": "",
+  "_from": "@sumsub/cordova-idensic-mobile-sdk-plugin",
+  "_id": "@sumsub/cordova-idensic-mobile-sdk-plugin@1.15.1",
+  "_inBundle": false,
+  "_integrity": "sha512-RkA3tuYoEhqB553SGwDL5UgmZcprnfdWj6TTSpO0gdJ7I0l2R5aktI3jDlJYuD67V4kkpk3EiUYHgil1e3DIqg==",
+  "_location": "/@sumsub/cordova-idensic-mobile-sdk-plugin",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@sumsub/cordova-idensic-mobile-sdk-plugin",
+    "name": "@sumsub/cordova-idensic-mobile-sdk-plugin",
+    "escapedName": "@sumsub%2fcordova-idensic-mobile-sdk-plugin",
+    "scope": "@sumsub",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@sumsub/cordova-idensic-mobile-sdk-plugin/-/cordova-idensic-mobile-sdk-plugin-1.15.1.tgz",
+  "_shasum": "97b29a9fc69e010f88dac9a2128009a9ddd965cd",
+  "_spec": "@sumsub/cordova-idensic-mobile-sdk-plugin",
+  "_where": "/Users/pavellapko/expCapital/exp-station",
   "author": {
     "name": "SumSub"
   },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-idensic-mobile-sdk-plugin",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "dependencies": {},
+  "deprecated": false,
+  "description": "Cordova plugin exposing SumSub SDK",
   "devDependencies": {
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.0",
@@ -29,10 +57,6 @@
     "webpack": "4.42.1",
     "webpack-cli": "3.3.11"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/expcapitaldev/sumsub-cordova-idensic-mobile-sdk-plugin"
-  },
   "keywords": [
     "sumsub",
     "cordova",
@@ -40,10 +64,14 @@
     "android",
     "ios"
   ],
-  "platforms": [
-    "android",
-    "ios"
-  ],
-  "engines": [],
-  "englishdoc": ""
+  "license": "Apache-2.0",
+  "main": "webpack.config.js",
+  "name": "@sumsub/cordova-idensic-mobile-sdk-plugin",
+  "repository": {
+    "type": "git"
+  },
+  "scripts": {
+    "build": "webpack -p"
+  },
+  "version": "1.15.1"
 }

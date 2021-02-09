@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+//const webpack = require('webpack');
 const path = require('path');
 
 const MAIN_FILE = './www/SNSMobileSDK.js';

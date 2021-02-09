@@ -4,6 +4,7 @@
 
 @interface SNSMobileSdkCordovaPlugin ()
 @property (nonatomic, copy) void(^tokenExpirationOnComplete)(NSString * _Nullable newAccessToken);
+@property (nonatomic, copy) void(^actionResultHandlerOnComplete)(SNSActionResultHandlerReaction);
 @property (nonatomic, weak) SNSMobileSDK *sdk;
 @end
 
@@ -42,12 +43,38 @@
         
         [weakSelf.commandDelegate evalJs:@"SNSMobileSDK.getNewAccessToken();" scheduledOnRunLoop:NO];
     }];
-    
+
     [sdk onDidDismiss:^(SNSMobileSDK * _Nonnull sdk) {
         
         [weakSelf complete:command withSDK:sdk];
     }];
     
+    if (params[@"hasHandlers"][@"onStatusChanged"]) {
+
+        [sdk setOnStatusDidChange:^(SNSMobileSDK * _Nonnull sdk, SNSMobileSDKStatus prevStatus) {
+            
+            [weakSelf sendEventWithName:@"onStatusChanged" body:@{
+                @"newStatus": [sdk descriptionForStatus:sdk.status] ?: @"",
+                @"prevStatus": [sdk descriptionForStatus:prevStatus] ?: @"",
+            }];
+        }];
+    }
+    
+    if (params[@"hasHandlers"][@"onActionResult"]) {
+
+        [sdk actionResultHandler:^(SNSMobileSDK * _Nonnull sdk, SNSActionResult * _Nonnull result, void (^ _Nonnull onComplete)(SNSActionResultHandlerReaction)) {
+            
+            weakSelf.actionResultHandlerOnComplete = onComplete;
+
+            [weakSelf sendEventWithName:@"onActionResult" body:@{
+                @"actionId": result.actionId ?: @"",
+                @"actionType": result.actionType ?: @"",
+                @"answer": result.answer ?: @"",
+                @"allowContinuing": @(result.allowContinuing),
+            }];
+        }];
+    }
+
     [self applyCustomizationIfAny];
 
     [sdk presentFrom:self.viewController];
@@ -59,12 +86,29 @@
     
 //    NSLog(@"got new token: %@", newAccessToken);
     
-    if (self.tokenExpirationOnComplete) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.tokenExpirationOnComplete) {
             self.tokenExpirationOnComplete(newAccessToken);
             self.tokenExpirationOnComplete = nil;
-        });
+        }
+    });
+}
+
+- (void)onActionResultCompleted:(CDVInvokedUrlCommand*)command {
+
+    NSDictionary *params = command.arguments.firstObject;
+
+    SNSActionResultHandlerReaction reaction = SNSActionResultHandlerReaction_Continue;
+    if ([params[@"result"] isEqualToString:@"cancel"]) {
+        reaction = SNSActionResultHandlerReaction_Cancel;
     }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.actionResultHandlerOnComplete) {
+            self.actionResultHandlerOnComplete(reaction);
+            self.actionResultHandlerOnComplete = nil;
+        }
+    });
 }
 
 - (void)dismiss:(CDVInvokedUrlCommand*)command {
@@ -110,6 +154,35 @@
 
 #pragma mark - Helpers
 
+- (NSString *)stringFromJSON:(NSDictionary *)dict {
+    
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict
+                                                       options:0
+                                                         error:&error];
+    
+    if (!jsonData) {
+        return @"{}";
+    } else {
+        return [NSString.alloc initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
+- (void)sendEventWithName:(NSString *)name body:(NSDictionary *)body {
+
+    NSString *jsonString = body ? [self stringFromJSON:body] : @"{}"; 
+
+    NSString *command = [NSString stringWithFormat:@"SNSMobileSDK.sendEvent('%@', %@);", name, jsonString];
+
+    if (NSThread.isMainThread) {
+        [self.commandDelegate evalJs:command scheduledOnRunLoop:NO];
+    } else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.commandDelegate evalJs:command scheduledOnRunLoop:NO];
+        });
+    }
+}
+
 - (void)complete:(CDVInvokedUrlCommand *)command withSDK:(SNSMobileSDK *)sdk {
 
     NSMutableDictionary *result = NSMutableDictionary.new;
@@ -122,6 +195,17 @@
         result[@"errorMsg"] = sdk.verboseStatus;
     }
     
+    if (sdk.status == SNSMobileSDKStatus_ActionCompleted && sdk.actionResult) {
+        NSMutableDictionary *actionResult = NSMutableDictionary.new;
+        
+        actionResult[@"actionId"] = sdk.actionResult.actionId;
+        actionResult[@"actionType"] = sdk.actionResult.actionType;
+        actionResult[@"answer"] = sdk.actionResult.answer;
+        actionResult[@"allowContinuing"] = @(sdk.actionResult.allowContinuing);
+
+        result[@"actionResult"] = actionResult.copy;
+    }
+
     [self complete:command withResult:result.copy];
 }
 
@@ -148,4 +232,3 @@
 }
 
 @end
-

@@ -21,21 +21,20 @@ apply plugin: 'com.android.library'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-allprojects {
+rootProject.allprojects {
     repositories {
-        maven { url "https://maven.sumsub.com//repository/maven-public/" }
-
         google()
         jcenter()
+        maven { url "https://maven.sumsub.com/repository/maven-public/" }
     }
 }
+
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -49,8 +48,8 @@ android {
 }
 
 dependencies {
-    implementation "com.sumsub.sns:idensic-mobile-sdk:1.12.2"
-    implementation "com.sumsub.sns:idensic-mobile-sdk-liveness3d:1.12.2"
+    implementation "com.sumsub.sns:idensic-mobile-sdk:1.15.1"
+    implementation "com.sumsub.sns:idensic-mobile-sdk-liveness3d:1.15.1"
 
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'org.apache.cordova:framework:8.1.0'
